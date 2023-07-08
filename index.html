@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Film Archivist</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');
+
+        body {
+            margin: 0;
+            font-family: 'Prompt', sans-serif;
+            background-image: url('https://wallpapercave.com/wp/wp3212727.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 10px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 36px;
+            margin-bottom: 20px;
+            font-weight: 900;
+            text-align: center;
+        }
+
+        input[type="text"] {
+            font-family: 'Prompt', sans-serif;
+            padding: 10px;
+            width: 70%;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            font-family: 'Prompt', sans-serif;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        #movieList {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .movieCard {
+            width: 300px;
+            margin: 10px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            font-family: 'Prompt', sans-serif;
+            border-radius: 5px;
+            text-align: left;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .movieCard h2 {
+            margin-top: 0;
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .movieCard img {
+            width: 100%;
+            height: auto;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+
+        .movieCard p {
+            margin-top: 10px;
+            color: #666;
+            font-size: 16px;
+            line-height: 1.4;
+        }
+
+        .searchResults {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .searchResults .searchResult {
+            width: 300px;
+            margin: 10px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: left;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .searchResults .searchResult h3 {
+            margin-top: 0;
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .searchResults .searchResult img {
+            width: 100%;
+            height: auto;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+
+        .searchResults .searchResult p {
+            margin-top: 10px;
+            color: #666;
+            font-size: 16px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Film Archivist</h1>
+        <input type="text" id="searchInput" placeholder="Enter a movie title">
+        <button onclick="searchMovies()">Movie</button>
+        <button onclick="searchSeries()">Series</button>
+        <button onclick="clearMovies()">Clear</button>
+        <div id="movieList"></div>
+    </div>
+
+    <script>
+        function searchMovies() {
+            var searchInput = document.getElementById('searchInput').value;
+            var url = 'https://api.tvmaze.com/search/shows?q=' + searchInput;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => displayMovies(data))
+                .catch(error => console.log(error));
+        }
+
+        function searchSeries() {
+            var searchInput = document.getElementById('searchInput').value;
+            var url = 'https://api.tvmaze.com/search/shows?q=' + searchInput;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => displaySeries(data))
+                .catch(error => console.log(error));
+        }
+
+        function displayMovies(movies) {
+            var movieList = document.getElementById('movieList');
+            movieList.innerHTML = '';
+
+            movies.forEach(movie => {
+                var movieCard = document.createElement('div');
+                movieCard.classList.add('movieCard');
+
+                var title = document.createElement('h2');
+                title.textContent = movie.show.name;
+
+                var poster = document.createElement('img');
+                poster.src = movie.show.image.medium;
+
+                movieCard.appendChild(title);
+                movieCard.appendChild(poster);
+                movieList.appendChild(movieCard);
+            });
+        }
+
+        function displaySeries(series) {
+            var movieList = document.getElementById('movieList');
+            movieList.innerHTML = '';
+
+            series.forEach(serie => {
+                var movieCard = document.createElement('div');
+                movieCard.classList.add('movieCard');
+
+                var title = document.createElement('h2');
+                title.textContent = serie.show.name;
+
+                var poster = document.createElement('img');
+                poster.src = serie.show.image.medium;
+
+                movieCard.appendChild(title);
+                movieCard.appendChild(poster);
+                movieList.appendChild(movieCard);
+            });
+        }
+        function clearMovies() {
+            var movieList = document.getElementById('movieList');
+            movieList.innerHTML = '';
+        }
+    </script>
+</body>
+
+</html>
